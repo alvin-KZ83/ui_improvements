@@ -66,8 +66,8 @@ async function analyzeSentenceAndCreateSubBoxes(parentBox, noteArea) {
       // Remove any other active definition popups
       noteArea.querySelectorAll(".def-popup").forEach(p => p.remove());
 
-      const rect = subBox.getBoundingClientRect();
-      const noteRect = noteArea.getBoundingClientRect();
+      // const rect = subBox.getBoundingClientRect();
+      // const noteRect = noteArea.getBoundingClientRect();
 
       // Default definition message
       let definitionText = "No definition found.";
@@ -89,12 +89,13 @@ async function analyzeSentenceAndCreateSubBoxes(parentBox, noteArea) {
       popup.innerHTML = `<p>${definitionText}</p>`;
 
       // Position popup below sub-note
-      const centerX = rect.left + rect.width / 2 - noteRect.left;
-      const topY = rect.bottom - noteRect.top + 8;
-      popup.style.left = `${centerX}px`;
-      popup.style.top = `${topY}px`;
+      // const centerX = rect.left + rect.width / 2 - noteRect.left;
+      // const topY = rect.bottom - noteRect.top + 8;
+      // popup.style.left = `${centerX}px`;
+      // popup.style.top = `${topY}px`;
 
-      noteArea.appendChild(popup);
+      // noteArea.appendChild(popup);
+      subBox.appendChild(popup);
     });
 
     subContainer.appendChild(subBox);

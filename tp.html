@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,13 +15,14 @@
 </head>
 
 <body>
+
   <div id="app">
     <!-- Header -->
     <header id="header">
       <div class="recording-indicator">
-        <button class="indicator-dot" onclick="startTranscription()">
+        <div class="indicator-dot" onclick="startTranscription()">
           <div class="indicator-inner"></div>
-        </button>
+        </div>
         <p id="status" class="recording-time"></p>
       </div>
 
@@ -40,10 +42,9 @@
     <!-- Add this hidden popup container -->
     <div id="camera-popup" class="hidden">
       <video id="camera-stream" autoplay></video>
-      <button id="capture-btn">📸 Capture</button>
+      <button id="capture-btn">Capture</button>
       <canvas id="snapshot" class="hidden"></canvas>
     </div>
-
     <!-- Transcription area -->
     <main id="transcription">
       <div id="live-transcript"></div>
@@ -54,21 +55,16 @@
       <div class="footer-content">
         <div id="guide-msg" class="footer-header">
           <p class="footer-title">Drag keywords here</p>
-          <p class="footer-subtitle">Highlight words or phrases from the transcription above to save it for later review.</p>
+          <p class="footer-subtitle">Highlight words or phrases from the transcription above to save it for later
+            review.</p>
         </div>
 
-        <div id="note-area" class="keyword-list">
-          <!-- <div class="keyword-chip">
-            <span>Quantum Entanglement</span>
-            <button class="chip-close">
-              <span class="material-symbols-outlined">close</span>
-            </button>
-          </div> -->
-        </div>
+        <div id="note-area" class="keyword-list"></div>
       </div>
     </footer>
   </div>
 
   <script type="module" src="./main.js"></script>
 </body>
+
 </html>
