@@ -1,0 +1,17 @@
+{
+  "language": "ja",
+  "languages": {
+    "en": {
+      "name": "English",
+      "nlp": "compromise",
+      "dictionaryApi": "https://api.dictionaryapi.dev/api/v2/entries/en/",
+      "speechLang": "en-US"
+    },
+    "ja": {
+      "name": "Japanese",
+      "nlp": "kuromoji",
+      "dictionaryApi": "https://jisho.org/api/v1/search/words?keyword=",
+      "speechLang": "ja-JP"
+    }
+  }
+}
