@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Lecture Timeline</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#007BFF",
+                        "background-light": "#F8F9FA",
+                        "background-dark": "#111722",
+                        "slate-gray": "#343A40"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-[#343A40] dark:text-gray-200">
+    <div class="relative flex h-auto min-h-screen w-full flex-col">
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- Header Section -->
+            <header
+                class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 dark:border-slate-gray/50 px-6 sm:px-10 py-4">
+                <div class="flex items-center gap-4 text-slate-gray dark:text-white">
+                    <div class="size-6 text-primary">
+                        <svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path clip-rule="evenodd"
+                                d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z"
+                                fill="currentColor" fill-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-bold leading-tight tracking-tight">Introduction to Quantum Mechanics</h2>
+                </div>
+                <button
+                    class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-gray-200 dark:bg-slate-gray/50 text-slate-gray dark:text-white gap-2 text-sm font-bold leading-normal tracking-wide min-w-0 px-4 hover:bg-gray-300 dark:hover:bg-slate-gray/80 transition-colors">
+                    <span class="material-symbols-outlined text-xl">arrow_back</span>
+                    <span>Back</span>
+                </button>
+            </header>
+            <div class="px-6 sm:px-10 flex-1 justify-center py-5">
+                <div class="layout-content-container flex flex-col mx-auto flex-1">
+                    <!-- Title and Meta Section -->
+                    <div class="px-4">
+                        <h1
+                            class="text-slate-gray dark:text-white tracking-tight text-[32px] font-bold leading-tight pt-6 pb-2">
+                            Lecture Timeline</h1>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm font-normal leading-normal pb-6">October 26,
+                            2023</p>
+                    </div>
+                    <!-- Filter Chips -->
+                    <div class="flex items-center justify-between gap-4 p-4 flex-wrap">
+                        <div class="flex gap-3 flex-wrap">
+                            <div
+                                class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-primary pl-4 pr-4 text-white">
+                                <p class="text-sm font-medium leading-normal">All</p>
+                            </div>
+                            <div
+                                class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-gray-200 dark:bg-slate-gray/50 pl-4 pr-4 text-slate-gray dark:text-white hover:bg-gray-300 dark:hover:bg-slate-gray/80 transition-colors">
+                                <span class="material-symbols-outlined text-base text-orange-500">image</span>
+                                <p class="text-sm font-medium leading-normal">Images</p>
+                            </div>
+                            <div
+                                class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-gray-200 dark:bg-slate-gray/50 pl-4 pr-4 text-slate-gray dark:text-white hover:bg-gray-300 dark:hover:bg-slate-gray/80 transition-colors">
+                                <span class="material-symbols-outlined text-base text-primary">label</span>
+                                <p class="text-sm font-medium leading-normal">Keywords</p>
+                            </div>
+                            <div
+                                class="flex h-8 shrink-0 cursor-pointer items-center justify-center gap-x-2 rounded-full bg-gray-200 dark:bg-slate-gray/50 pl-4 pr-4 text-slate-gray dark:text-white hover:bg-gray-300 dark:hover:bg-slate-gray/80 transition-colors">
+                                <span
+                                    class="material-symbols-outlined text-base text-gray-500 dark:text-gray-400">format_quote</span>
+                                <p class="text-sm font-medium leading-normal">Phrases</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button
+                                class="flex size-9 cursor-pointer items-center justify-center rounded-lg bg-gray-200 dark:bg-slate-gray/50 text-slate-gray dark:text-white hover:bg-gray-300 dark:hover:bg-slate-gray/80 transition-colors">
+                                <span class="material-symbols-outlined text-xl">remove</span>
+                            </button>
+                            <button
+                                class="flex size-9 cursor-pointer items-center justify-center rounded-lg bg-gray-200 dark:bg-slate-gray/50 text-slate-gray dark:text-white hover:bg-gray-300 dark:hover:bg-slate-gray/80 transition-colors">
+                                <span class="material-symbols-outlined text-xl">add</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Timeline Section -->
+                    <div class="flex flex-col gap-8 w-full px-4 pt-10 pb-20 overflow-x-auto">
+                        <!-- Content Lanes -->
+                        <div class="relative w-full min-w-[800px] h-48">
+                            <!-- Image event 1 -->
+                            <div class="absolute bottom-1/2 mb-3 transform -translate-x-1/2 flex flex-col items-center gap-2 group cursor-pointer"
+                                style="left: 10%;">
+                                <div class="relative">
+                                    <img class="h-20 w-32 object-cover rounded-lg border-2 border-transparent group-hover:border-orange-500 transition-all duration-300 shadow-lg"
+                                        data-alt="Abstract colorful wave patterns representing wave-particle duality"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl2KZ4kHz5GG3j_XPm7Pt8jy9QipSELthD7i05Bseep2aSBpW4TyXsucHlhcR8BoyObM7yDmudz_wAhFYQJLXDAXrSPKvrpbRMBGRhdgkcy9xE1HVz0PrhW4usRz08tmu-0RE_gK0RhI6oOP3FSvvbxn5cmbxribPUFf5Q6-phOVS-Br1lpjJU6bkBJTjH0YudkcS-1zfbYZg8bCe3Ygc__AbkGqzKrhE38xlhu4DqmLt8u8sIGzzG5K5DF1JAT0ru4An9FaP3jv4" />
+                                    <div
+                                        class="absolute bottom-1 right-1 bg-black/50 text-white text-xs px-1.5 py-0.5 rounded">
+                                        05:12</div>
+                                </div>
+                                <div class="w-px h-3 bg-gray-300 dark:bg-gray-600"></div>
+                                <div
+                                    class="w-2.5 h-2.5 rounded-full bg-orange-500 border-2 border-background-light dark:border-background-dark">
+                                </div>
+                            </div>
+                            <!-- Keyword event 1 -->
+                            <div class="absolute top-1/2 mt-3 transform -translate-x-1/2 flex flex-col items-center gap-2 group cursor-pointer"
+                                style="left: 28%;">
+                                <div
+                                    class="w-2.5 h-2.5 rounded-full bg-primary border-2 border-background-light dark:border-background-dark">
+                                </div>
+                                <div class="w-px h-3 bg-gray-300 dark:bg-gray-600"></div>
+                                <div
+                                    class="bg-primary/20 text-primary-dark dark:text-primary-light text-sm font-medium px-3 py-1 rounded-full group-hover:bg-primary/30 transition-colors">
+                                    Schrödinger's Cat
+                                </div>
+                            </div>
+                            <!-- Phrase event 1 -->
+                            <div class="absolute bottom-1/2 mb-3 transform -translate-x-1/2 flex flex-col items-center gap-2 group cursor-pointer"
+                                style="left: 48%;">
+                                <div
+                                    class="bg-gray-200 dark:bg-slate-gray/50 text-slate-gray dark:text-gray-300 text-sm italic px-3 py-1 rounded-full group-hover:bg-gray-300 dark:group-hover:bg-slate-gray/80 transition-colors">
+                                    "spooky action at a distance"
+                                </div>
+                                <div class="w-px h-3 bg-gray-300 dark:bg-gray-600"></div>
+                                <div
+                                    class="w-2.5 h-2.5 rounded-full bg-gray-500 border-2 border-background-light dark:border-background-dark">
+                                </div>
+                            </div>
+                            <!-- Image event 2 -->
+                            <div class="absolute bottom-1/2 mb-3 transform -translate-x-1/2 flex flex-col items-center gap-2 group cursor-pointer"
+                                style="left: 65%;">
+                                <div class="relative">
+                                    <img class="h-20 w-32 object-cover rounded-lg border-2 border-transparent group-hover:border-orange-500 transition-all duration-300 shadow-lg"
+                                        data-alt="Abstract representation of quantum entanglement with interconnected nodes"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAklp49ZVnCaeM3GpfueHsODddDfOKNKlMR7FVmRTXAzqU_-m6Wz9vRxsiHdIzzxOV4_70qRVO4Tm0qTXVrZc9yRe6fxXHAtZjljlj-ducujCSk2Ab2oBBmN7KDDNW-JhzAyVUzt0fIx0mpgOPXWcbfmOh7Zi34e5vf5Z2fpRROyrxUS7FAdJxbCY54q6D6Voh0ThhZgRJSbBdYPZ0pN2jih7OrzSdUtDqTY5ih8Jzv-E-p-qRGXjGEc5deu17A0wEbXNYPwzCcG4I" />
+                                    <div
+                                        class="absolute bottom-1 right-1 bg-black/50 text-white text-xs px-1.5 py-0.5 rounded">
+                                        42:10</div>
+                                </div>
+                                <div class="w-px h-3 bg-gray-300 dark:bg-gray-600"></div>
+                                <div
+                                    class="w-2.5 h-2.5 rounded-full bg-orange-500 border-2 border-background-light dark:border-background-dark">
+                                </div>
+                            </div>
+                            <!-- Keyword event 2 -->
+                            <div class="absolute top-1/2 mt-3 transform -translate-x-1/2 flex flex-col items-center gap-2 group cursor-pointer"
+                                style="left: 88%;">
+                                <div
+                                    class="w-2.5 h-2.5 rounded-full bg-primary border-2 border-background-light dark:border-background-dark">
+                                </div>
+                                <div class="w-px h-3 bg-gray-300 dark:bg-gray-600"></div>
+                                <div
+                                    class="bg-primary/20 text-primary-dark dark:text-primary-light text-sm font-medium px-3 py-1 rounded-full group-hover:bg-primary/30 transition-colors">
+                                    Superposition
+                                </div>
+                            </div>
+                            <!-- Timeline Bar -->
+                            <div
+                                class="absolute top-1/2 left-0 w-full -translate-y-1/2 h-1.5 bg-gray-200 dark:bg-slate-gray rounded-full">
+                                <div class="absolute top-0 left-0 h-full bg-primary rounded-full" style="width: 35%;">
+                                </div>
+                                <div class="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white dark:bg-gray-300 border-2 border-primary rounded-full cursor-pointer"
+                                    style="left: 35%;"></div>
+                            </div>
+                        </div>
+                        <!-- Timestamp markers -->
+                        <div class="relative w-full min-w-[800px] h-6 -mt-6">
+                            <div
+                                class="absolute left-0 transform -translate-x-1/2 text-center text-xs text-gray-500 dark:text-gray-400">
+                                00:00</div>
+                            <div
+                                class="absolute left-[16.66%] transform -translate-x-1/2 text-center text-xs text-gray-500 dark:text-gray-400">
+                                15:00</div>
+                            <div
+                                class="absolute left-[33.33%] transform -translate-x-1/2 text-center text-xs text-gray-500 dark:text-gray-400">
+                                30:00</div>
+                            <div
+                                class="absolute left-[50%] transform -translate-x-1/2 text-center text-xs text-gray-500 dark:text-gray-400">
+                                45:00</div>
+                            <div
+                                class="absolute left-[66.66%] transform -translate-x-1/2 text-center text-xs text-gray-500 dark:text-gray-400">
+                                01:00:00</div>
+                            <div
+                                class="absolute left-[83.33%] transform -translate-x-1/2 text-center text-xs text-gray-500 dark:text-gray-400">
+                                01:15:00</div>
+                            <div
+                                class="absolute right-0 transform translate-x-1/2 text-center text-xs text-gray-500 dark:text-gray-400">
+                                01:30:00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
