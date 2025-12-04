@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lecture Timeline View</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script> tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#007BFF", "background-light": "#F8F9FA", "background-dark": "#111722", "slate-gray": "#343A40" }, fontFamily: { "display": ["Inter", "sans-serif"] }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, }, }, } </script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-[#343A40] dark:text-gray-200 font-display">
+    <div class="relative flex h-auto min-h-screen w-full flex-col">
+        <div class="layout-container flex grow flex-col"> <!-- Header -->
+            <header
+                class="flex items-center justify-between border-b border-gray-200 dark:border-slate-gray/50 px-6 sm:px-10 py-4">
+                <h2 class="text-lg font-bold text-slate-gray dark:text-white">Class Sample</h2> <button
+                    class="flex items-center gap-2 h-10 px-4 bg-gray-200 dark:bg-slate-gray/50 rounded-lg text-slate-gray dark:text-white hover:bg-gray-300 dark:hover:bg-slate-gray/80">
+                    <span class="material-symbols-outlined text-xl">arrow_back</span> Back </button>
+            </header> <!-- Content -->
+            <div class="px-6 sm:px-10 py-5 grow">
+                <div class="layout-content-container flex flex-col mx-auto grow">
+                    <div class="px-4">
+                        <h1 class="text-[32px] font-bold pt-6 pb-2 text-slate-gray dark:text-white">Timeline</h1>
+                        <p class="text-sm pb-6 text-gray-500 dark:text-gray-400">October 26, 2023</p>
+                    </div> <!-- Filters + Zoom -->
+                    <div class="flex items-center justify-between gap-4 p-4 flex-wrap">
+                        <div class="flex gap-3 flex-wrap">
+                            <div id="filterAll"
+                                class="bg-primary text-white rounded-full px-4 h-8 flex items-center cursor-pointer">
+                                <p class="text-sm font-medium">All</p>
+                            </div>
+                            <div id="filterImages"
+                                class="bg-gray-200 dark:bg-slate-gray/50 rounded-full px-4 h-8 flex items-center gap-2 cursor-pointer hover:bg-gray-300 dark:hover:bg-slate-gray/80">
+                                <span class="material-symbols-outlined text-orange-500 text-base">image</span> Images
+                            </div>
+                            <div id="filterPhrases"
+                                class="bg-gray-200 dark:bg-slate-gray/50 rounded-full px-4 h-8 flex items-center gap-2 cursor-pointer hover:bg-gray-300 dark:hover:bg-slate-gray/80">
+                                <span
+                                    class="material-symbols-outlined text-gray-500 dark:text-gray-400 text-base">format_quote</span>
+                                Phrases </div>
+                        </div> <!-- Zoom Buttons -->
+                        <div class="flex items-center gap-2"> <button id="zoomOut"
+                                class="size-9 bg-gray-200 dark:bg-slate-gray/50 rounded-lg flex items-center justify-center hover:bg-gray-300 dark:hover:bg-slate-gray/80">
+                                <span class="material-symbols-outlined">remove</span> </button> <button id="zoomIn"
+                                class="size-9 bg-gray-200 dark:bg-slate-gray/50 rounded-lg flex items-center justify-center hover:bg-gray-300 dark:hover:bg-slate-gray/80">
+                                <span class="material-symbols-outlined">add</span> </button> </div>
+                    </div> <!-- Upload Section -->
+                    <div class="px-6 sm:px-10 py-4 flex gap-4"> <input id="jsonUpload" type="file"
+                            accept="application/json" /> <input id="imageUpload" type="file" accept="image/png"
+                            multiple /> <button id="buildTimeline"
+                            class="px-4 py-2 bg-primary text-white rounded-lg font-semibold">Build Timeline</button>
+                    </div> <!-- Timeline -->
+                    <div id="timelineContainer"
+                        class="flex flex-col gap-8 w-full px-4 pt-10 pb-20 overflow-x-auto whitespace-nowrap"> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="display.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,327 @@
+/* ============================================================
+   BASE THEME (matching your app)
+   ============================================================ */
+   :root {
+    --color-primary: #135bec;
+    --color-bg-light: #f6f6f8;
+    --color-bg-dark: #101622;
+    --color-text-light: #1e293b;
+    --color-text-dark: #cbd5e1;
+  
+    --chip-bg-light: #f1f1f4;
+    --chip-bg-dark: #1f2937;
+  }
+  
+  /* Remove scrollbars, match app aesthetic */
+  * {
+    scrollbar-width: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  
+  body.tl-body {
+    margin: 0;
+    background: var(--color-bg-light);
+    color: var(--color-text-light);
+    font-family: "Inter", sans-serif;
+  }
+  
+  html.dark body.tl-body {
+    background: var(--color-bg-dark);
+    color: var(--color-text-dark);
+  }
+  
+  html { scroll-behavior: smooth; }
+  
+  /* ============================================================
+     HEADER
+     ============================================================ */
+  .tl-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: var(--color-bg-light);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  
+  html.dark .tl-header {
+    background: var(--color-bg-dark);
+    border-color: rgba(255,255,255,0.1);
+  }
+  
+  .tl-header-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  
+  .tl-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #e5e7eb;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .tl-back-btn:hover { background: #d5d7dd; }
+  
+  /* ============================================================
+     MAIN LAYOUT
+     ============================================================ */
+  .tl-main {
+    padding: 2rem 2.5rem;
+  }
+  
+  .tl-title-block { margin-bottom: 1rem; }
+  
+  .tl-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+  }
+  
+  .tl-date {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+  
+  /* ============================================================
+     FILTER CHIPS
+     ============================================================ */
+  .tl-controls {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .tl-chips {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px;
+    background: #e5e7eb;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: #374151;
+    transition: 0.15s ease;
+  }
+  
+  .chip:hover { background: #d5d7dd; }
+  
+  .chip-active {
+    background: var(--color-primary);
+    color: white;
+  }
+  
+  html.dark .chip {
+    background: rgba(255,255,255,0.1);
+    color: var(--color-text-dark);
+  }
+  
+  html.dark .chip:hover {
+    background: rgba(255,255,255,0.2);
+  }
+  
+  /* ============================================================
+     ZOOM BUTTONS
+     ============================================================ */
+  .tl-zoom { display: flex; gap: 10px; }
+  
+  .zoom-btn {
+    width: 36px;
+    height: 36px;
+    background: #e5e7eb;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .zoom-btn:hover { background: #d5d7dd; }
+  
+  html.dark .zoom-btn {
+    background: rgba(255,255,255,0.1);
+  }
+  
+  /* ============================================================
+     UPLOAD ROW
+     ============================================================ */
+  .tl-upload {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    align-items: center;
+  }
+  
+  .build-btn {
+    padding: 8px 16px;
+    background: var(--color-primary);
+    border-radius: 8px;
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  .build-btn:hover { background: #0f4ec7; }
+  
+  /* ============================================================
+     TIMELINE AREA
+     ============================================================ */
+  .timeline-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    min-height: 300px;
+  }
+  
+  .timeline-wrapper {
+    position: relative;
+    height: 200px;
+    min-width: 800px;
+    transition: width 0.25s ease;
+  }
+  
+  /* ============================================================
+     TIMELINE BAR — EXACT TAILWIND LOOK
+     ============================================================ */
+  .timeline-bar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 6px;
+    width: 80%;
+    border-radius: 9999px;
+    background: #e5e7eb;
+  }
+  
+  html.dark .timeline-bar {
+    background: rgba(255,255,255,0.15);
+  }
+  
+  /* ============================================================
+     IMAGE EVENTS — EXACT TAILWIND LOOK
+     ============================================================ */
+  .timeline-event {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-50%);
+    gap: 6px;
+  }
+  
+  /* Image bubble */
+  .timeline-img {
+    width: 128px;
+    height: 80px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    border: 2px solid transparent;
+    transition: 0.2s ease;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  }
+  
+  .timeline-event:hover .timeline-img {
+    border-color: #fb923c; /* orange-500 */
+  }
+  
+  /* Time badge */
+  .time-badge {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    font-size: 0.7rem;
+    background: rgba(0,0,0,0.55);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  
+  /* Connector line */
+  .event-line {
+    width: 2px;
+    height: 12px;
+    background: #d1d5db;
+  }
+  
+  /* Orange dot */
+  .dot-orange {
+    width: 10px;
+    height: 10px;
+    background: #fb923c;
+    border-radius: 9999px;
+    border: 2px solid white;
+  }
+  
+  /* ============================================================
+     PHRASE EVENTS — EXACT TAILWIND LOOK
+     ============================================================ */
+  .phrase-chip {
+    background: #e5e7eb;
+    color: #374151;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-style: italic;
+    text-align: center;
+    max-width: 260px;
+    white-space: normal;
+    transition: 0.2s ease;
+  }
+  
+  .timeline-event:hover .phrase-chip {
+    background: #d5d7dd;
+  }
+  
+  /* connector & dot */
+  .phrase-line {
+    width: 2px;
+    height: 12px;
+    background: #d1d5db;
+  }
+  
+  .phrase-dot {
+    width: 10px;
+    height: 10px;
+    background: #6b7280;
+    border-radius: 9999px;
+    border: 2px solid white;
+  }
+  
+  /* Dark Mode adjustments */
+  html.dark .phrase-chip {
+    background: rgba(255,255,255,0.1);
+    color: #e5e7eb;
+  }
+  html.dark .phrase-line { background: rgba(255,255,255,0.2); }
+  html.dark .phrase-dot { border-color: var(--color-bg-dark); }
+  
+  /* ============================================================
+     TIMESTAMP LABELS
+     ============================================================ */
+  .timestamp-label {
+    position: absolute;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+  
+  html.dark .timestamp-label { color: #cbd5e1; }
+  

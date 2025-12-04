@@ -169,6 +169,27 @@ function stopTranscription() {
   stopTimer();
   document.getElementById("status").textContent = "";
   exportKeywordsToJSON();
+
+  // Convert to JSON and trigger download
+  const json = JSON.stringify(transcriptSegments, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+
+  // Include lecture title in filename
+  const lectureTitle = document
+    .getElementById("lecture-title")
+    .textContent.trim()
+    .replace(/\s+/g, "_");
+  const filename = `${lectureTitle}_transcript.json`;
+
+  link.download = filename;
+  link.click();
+
+  // Clean up temporary blob URL
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 /* =========================================================
@@ -178,15 +199,28 @@ function stopTranscription() {
 /**
  * Adds sample sentences to simulate transcription (no mic required).
  */
-const sample = [
+const sample_en = [
   "The water cycle is a continuous process that moves water through the atmosphere, land, and oceans. ",
   "It begins with evaporation, when the sun heats bodies of water like lakes and rivers, causing water to change into vapor. ",
   "This vapor then rises and condenses into clouds in the atmosphere. ",
   "Eventually, precipitation returns water to the earth in the form of rain, snow, or hail."
 ];
 
+const sample_ja = [
+  "好きな人と会話をするのなら、禁句にしたい言葉がある。",
+  "禁句とは使わないほうがいい言葉。",
+  "それは「はい」と「いいえ」だ。",
+  "例えば、「海外旅行に行ったことある？」という質問に「いいえ」で返してしまうと、終わりだ。",
+  "別に相手の話に肯定も否定もするな、と言っているわけではない。",
+  "「はい」と「いいえ」は使わず、別の表現に言い換えてみよう。",
+  "「海外旅行に行ったことある？」という質問に「行ったことはないけど行ってみたい。",
+  "一番行ってみたいのは中国。",
+  "万里の長城を実際に見てみたい」そう言うと、相手は興味を引かれ、会話がさらに続くことだろう。"
+]
+
 let sid = 0;
 function debugTest() {
+  let sample = (config.language === "en") ? sample_en : sample_ja;
   if (sid < sample.length) {
     transcriptContainer.textContent += sample[sid];
     sid += 1;
@@ -248,6 +282,9 @@ function getElapsedTime() {
 /**
  * Extracts all saved keyword chips and sub-notes, then downloads as a JSON file.
  */
+/**
+ * Extracts all saved keyword chips and sub-notes, then downloads as a JSON file.
+ */
 function exportKeywordsToJSON() {
   const noteArea = document.getElementById("note-area");
   const chips = noteArea.querySelectorAll(".keyword-chip");
@@ -274,6 +311,17 @@ function exportKeywordsToJSON() {
 
     return { time, keyword: content, results };
   });
+
+  /* ============================================
+     NEW: Save extracted phrases into localStorage
+  ============================================ */
+
+  try {
+    localStorage.setItem("capturedPhrases", JSON.stringify(data));
+    console.log("Phrases saved to localStorage:", data);
+  } catch (err) {
+    console.error("Unable to save phrases to localStorage:", err);
+  }
 
   // Convert to JSON and trigger download
   const json = JSON.stringify(data, null, 2);

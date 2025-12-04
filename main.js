@@ -171,20 +171,60 @@ cameraBtn.addEventListener("click", async () => {
   }
 });
 
+// /**
+//  * Capture image from video, name it with timestamp + lecture title,
+//  * and automatically download it.
+//  */
+// captureBtn.addEventListener("click", () => {
+//   if (!stream) return;
+
+//   // Draw current frame to canvas
+//   const ctx = canvas.getContext("2d");
+//   canvas.width = video.videoWidth;
+//   canvas.height = video.videoHeight;
+//   ctx.drawImage(video, 0, 0);
+
+//   // Build filename using elapsed recording time + lecture title
+//   const elapsed = getElapsedTime();
+//   const lectureTitle = document
+//     .getElementById("lecture-title")
+//     .textContent.trim()
+//     .replace(/\s+/g, "_");
+
+//   const filename = `${lectureTitle}_${elapsed.replace(":", "-")}.png`;
+
+//   // Convert canvas to image blob and trigger download
+//   canvas.toBlob((blob) => {
+//     const link = document.createElement("a");
+//     link.href = URL.createObjectURL(blob);
+//     link.download = filename;
+//     link.click();
+
+//     // Release memory after short delay
+//     setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+//   }, "image/png");
+
+//   // Stop camera and close popup
+//   stream.getTracks().forEach((track) => track.stop());
+//   setTimeout(() => {
+//     cameraPopup.classList.add("hidden");
+//     canvas.classList.add("hidden");
+//   }, 500);
+// });
+
+
 /**
- * Capture image from video, name it with timestamp + lecture title,
- * and automatically download it.
+ * TODO EDIT OF CAPTURE IMAGE
+ * Capture image from video, download it, and save to localStorage
  */
 captureBtn.addEventListener("click", () => {
   if (!stream) return;
 
-  // Draw current frame to canvas
   const ctx = canvas.getContext("2d");
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   ctx.drawImage(video, 0, 0);
 
-  // Build filename using elapsed recording time + lecture title
   const elapsed = getElapsedTime();
   const lectureTitle = document
     .getElementById("lecture-title")
@@ -193,15 +233,37 @@ captureBtn.addEventListener("click", () => {
 
   const filename = `${lectureTitle}_${elapsed.replace(":", "-")}.png`;
 
-  // Convert canvas to image blob and trigger download
   canvas.toBlob((blob) => {
+    /* --- 1. Trigger file download (same as before) --- */
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
+    const objectUrl = URL.createObjectURL(blob);
+    link.href = objectUrl;
     link.download = filename;
     link.click();
 
-    // Release memory after short delay
-    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    /* --- 2. Convert Blob → Base64 data URL --- */
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Data = reader.result; // <-- this is the Base64 image
+
+      /* --- 3. Save the image in localStorage array --- */
+      const stored = JSON.parse(localStorage.getItem("capturedImages") || "[]");
+
+      stored.push({
+        filename: filename,
+        time: elapsed,
+        dataUrl: base64Data,
+        savedAt: Date.now()
+      });
+
+      localStorage.setItem("capturedImages", JSON.stringify(stored));
+      console.log("Image saved in localStorage:", filename);
+    };
+
+    reader.readAsDataURL(blob);
+
+    /* Cleanup */
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
   }, "image/png");
 
   // Stop camera and close popup
