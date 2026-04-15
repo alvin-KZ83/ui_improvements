@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 <html class="dark" lang="ja">
 
-<a href="index.html">index</a>
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lecture JSON Explorer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="lxstyle.css" />
 </head>
+
 <body>
+
+  <a href="index.html">index</a>
+
   <div id="app">
     <header id="header">
       <div class="recording-indicator">
-        <div class="indicator-dot"><div class="indicator-inner"></div></div>
+        <div class="indicator-dot">
+          <div class="indicator-inner"></div>
+        </div>
         <div>
           <div class="recording-time">まとめページ</div>
         </div>
@@ -63,7 +68,9 @@
           </div>
           <div class="field">
             <label for="keywordSelect">フォーカスキーワード</label>
-            <select id="keywordSelect"><option value="">全キーワード</option></select>
+            <select id="keywordSelect">
+              <option value="">全キーワード</option>
+            </select>
           </div>
           <div class="field">
             <label for="sortSelect">セグメントを並べ替え</label>
@@ -98,7 +105,9 @@
                 <span id="keywordCountBadge" class="count-badge">0 tokens</span>
               </div>
               <div class="surface-body">
-                <div id="keywordBars" class="bars"><div class="empty">Load data to see keyword patterns.</div></div>
+                <div id="keywordBars" class="bars">
+                  <div class="empty">Load data to see keyword patterns.</div>
+                </div>
               </div>
             </div>
 
@@ -108,10 +117,12 @@
                 <span id="spotlightBadge" class="count-badge">No selection</span>
               </div>
               <div class="surface-body">
-                <div id="spotlight" class="spotlight-body"><div class="empty">Select a segment to inspect it.</div></div>
+                <div id="spotlight" class="spotlight-body">
+                  <div class="empty">Select a segment to inspect it.</div>
+                </div>
               </div>
             </div>
-          <!--
+            <!--
             <div class="surface">
               <div class="surface-header">
                 <h3>Data quality flags</h3>
@@ -147,7 +158,7 @@
   {"time":"00:55","text":"つまり 感性を理解することは 人がどのように感じるかを理解し それを設計に活かすことにつながります"}
 ]</script>
 
-<script id="sample-keywords" type="application/json">[
+  <script id="sample-keywords" type="application/json">[
   {"time":"00:00","keyword":"感性 知性 違い","results":["感性","知性","違い"]},
   {"time":"00:05","keyword":"感性 意味 感受性","results":["感性","意味","感受性"]},
   {"time":"00:09","keyword":"直感 印象","results":["直感","印象"]},
@@ -358,8 +369,8 @@
           <div class="segment-text">${highlightText(row.text || '(No transcript text for this time range.)', state.search)}</div>
           <div class="chips">
             ${row.keywordTokens.length
-              ? row.keywordTokens.slice(0, 12).map(token => `<span class="chip" data-chip="${escapeHtml(token)}">${highlightText(token, state.search)}</span>`).join('')
-              : `<span class="chip muted">No matched timed keywords</span>`}
+          ? row.keywordTokens.slice(0, 12).map(token => `<span class="chip" data-chip="${escapeHtml(token)}">${highlightText(token, state.search)}</span>`).join('')
+          : `<span class="chip muted">No matched timed keywords</span>`}
           </div>
         </article>
       `).join('');
@@ -397,14 +408,14 @@
         <div class="spotlight-block">${escapeHtml(selected.text || '(No transcript text for this item)')}</div>
         <div class="keyword-list">
           ${selected.keywordTokens.length
-            ? selected.keywordTokens.map(token => `<span class="keyword-chip" data-chip="${escapeHtml(token)}">${escapeHtml(token)}</span>`).join('')
-            : `<span class="chip muted">No keyword tokens</span>`}
+          ? selected.keywordTokens.map(token => `<span class="keyword-chip" data-chip="${escapeHtml(token)}">${escapeHtml(token)}</span>`).join('')
+          : `<span class="chip muted">No keyword tokens</span>`}
         </div>
         <div class="spotlight-block">
           <strong>Raw keyword strings</strong><br><br>
           ${selected.rawKeywordStrings.length
-            ? selected.rawKeywordStrings.map(str => `<div style="margin-top:0.55rem; color: var(--color-text-soft);">${escapeHtml(str)}</div>`).join('')
-            : `<span style="color: var(--color-text-soft);">No exact-time keyword strings attached to this segment.</span>`}
+          ? selected.rawKeywordStrings.map(str => `<div style="margin-top:0.55rem; color: var(--color-text-soft);">${escapeHtml(str)}</div>`).join('')
+          : `<span style="color: var(--color-text-soft);">No exact-time keyword strings attached to this segment.</span>`}
         </div>
       `;
     }
@@ -530,4 +541,5 @@
     renderAll();
   </script>
 </body>
+
 </html>
