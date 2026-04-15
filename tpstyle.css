@@ -400,3 +400,90 @@ html.dark .keyword-chip.sub-note:hover {
 .chip-close .material-symbols-outlined {
   font-size: 1rem;
 }
+
+/*NEW ADDITION 4/7/2026*/
+
+.mode {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.mode.immersive {
+  background: rgba(80, 120, 255, 0.14);
+  color: #7ea2ff;
+}
+
+.mode.assistive {
+  background: rgba(255, 255, 255, 0.08);
+  color: #d7d7d7;
+}
+
+.mode.automated {
+  background: rgba(255, 180, 80, 0.14);
+  color: #ffcb7d;
+}
+
+/* Transcript mode visuals */
+#live-transcript.mode-immersive {
+  opacity: 0.45;
+  transition: opacity 0.5s ease;
+}
+
+#live-transcript.mode-assistive {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+#live-transcript.mode-automated {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+/* Noun highlight */
+.noun-highlight {
+  color: #ffd166;
+  font-weight: 600;
+}
+
+#transcription {
+  position: relative;
+  overflow: hidden;
+}
+
+#live-transcript {
+  position: relative;
+  z-index: 1;
+}
+
+#transcript-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0);
+  transition: background 0.25s ease, backdrop-filter 0.25s ease, opacity 0.25s ease;
+}
+
+/* immersive: hide/mute transcript more */
+#transcription.mode-immersive #transcript-overlay {
+  background: rgb(16, 22, 35, 1.0);
+  backdrop-filter: blur(0);
+}
+
+/* assistive: unchanged */
+#transcription.mode-assistive #transcript-overlay {
+  background: rgba(16, 22, 35, 0.5);
+  backdrop-filter: blur(0);
+}
+
+/* automated: unchanged */
+#transcription.mode-automated #transcript-overlay {
+  background: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(0);
+}

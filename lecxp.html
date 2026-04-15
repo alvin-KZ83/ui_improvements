@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lecture JSON Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="lxstyle.css" />
+</head>
+<body>
+  <div id="app">
+    <header id="header">
+      <div class="recording-indicator">
+        <div class="indicator-dot"><div class="indicator-inner"></div></div>
+        <div>
+          <div class="recording-time">まとめページ</div>
+        </div>
+      </div>
+      <h2 id="lecture-title">授業のタイトル</h2>
+      <div class="header-actions">
+        <span class="mode" id="modeLabel">自動</span>
+        <button class="btn ghost" id="themeBtn">ダーク</button>
+      </div>
+    </header>
+
+    <section id="transcription" class="mode-assistive">
+      <div id="live-transcript" class="mode-assistive"></div>
+      <div id="transcript-overlay"></div>
+    </section>
+
+    <section id="keyword-footer">
+      <div class="footer-content">
+        <div class="footer-header">
+          <!-- <h3 class="footer-title">Turn exported JSON into a supervisor-ready analysis surface</h3>
+          <p class="footer-subtitle">
+            This version keeps the transcript and keyword data, but presents them as a structured replay dashboard with searchable segments,
+            keyword intelligence, spotlight analysis, and export quality checks.
+          </p> -->
+        </div>
+
+        <div class="file-row">
+          <div class="field">
+            <label for="transcriptFile">書き起こしのJSON</label>
+            <input id="transcriptFile" type="file" accept=".json,application/json" />
+          </div>
+          <div class="field">
+            <label for="keywordsFile">キーワードのJSON</label>
+            <input id="keywordsFile" type="file" accept=".json,application/json" />
+          </div>
+          <button class="btn primary" id="loadSampleBtn">ロード</button>
+          <button class="btn ghost" id="clearBtn">消す</button>
+        </div>
+
+        <div class="toolbar">
+          <div class="field">
+            <label for="searchInput">書き起こし・キーワードを検索</label>
+            <input id="searchInput" type="text" placeholder="フレーズ、単語、概念を入力" />
+          </div>
+          <div class="field">
+            <label for="keywordSelect">フォーカスキーワード</label>
+            <select id="keywordSelect"><option value="">全キーワード</option></select>
+          </div>
+          <div class="field">
+            <label for="sortSelect">セグメントを並べ替え</label>
+            <select id="sortSelect">
+              <option value="time">時間順</option>
+              <option value="density">キーワード出現率</option>
+              <option value="length">テキスト量</option>
+            </select>
+          </div>
+          <button class="btn ghost" id="resetFiltersBtn">リセット</button>
+        </div>
+
+        <div id="status" class="status-text">両方のファイルをアップして下さい</div>
+
+        <div class="panel-grid">
+          <div class="surface">
+            <div class="surface-header">
+              <h3>書き起こしのタイムライン</h3>
+              <span id="timelineSummary" class="count-badge">No data</span>
+            </div>
+            <div class="surface-body">
+              <div id="timeline" class="timeline">
+                <div class="empty">No data loaded yet.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="right-column">
+            <div class="surface">
+              <div class="surface-header">
+                <h3>キーワードの頻度</h3>
+                <span id="keywordCountBadge" class="count-badge">0 tokens</span>
+              </div>
+              <div class="surface-body">
+                <div id="keywordBars" class="bars"><div class="empty">Load data to see keyword patterns.</div></div>
+              </div>
+            </div>
+
+            <div class="surface">
+              <div class="surface-header">
+                <h3>セグメントハイライト</h3>
+                <span id="spotlightBadge" class="count-badge">No selection</span>
+              </div>
+              <div class="surface-body">
+                <div id="spotlight" class="spotlight-body"><div class="empty">Select a segment to inspect it.</div></div>
+              </div>
+            </div>
+          <!--
+            <div class="surface">
+              <div class="surface-header">
+                <h3>Data quality flags</h3>
+                <span class="count-badge">export audit</span>
+              </div>
+              <div class="surface-body">
+                <div id="qualityFlags" class="mini-list"><div class="empty">Load data to evaluate export quality.</div></div>
+              </div>
+            </div>
+          -->
+
+          </div>
+        </div>
+
+        <!-- <div class="footer-note">Single-file HTML prototype for transcript + keyword export review.</div> -->
+      </div>
+    </section>
+  </div>
+
+  <script id="sample-transcript" type="application/json">[
+  {"time":"00:00","text":"今日は 日本における「感性」とは何か そして「知性」との違いについて簡単に説明します"},
+  {"time":"00:05","text":"感性はよく「センス」や「感受性」と訳されますが それだけでは十分ではありません"},
+  {"time":"00:09","text":"感性とは 人が物事を直感的に感じ取り そこから意味や印象を受け取る力のことです"},
+  {"time":"00:14","text":"例えば 製品や空間 音楽などに触れたときに 理屈を考える前に何かを感じる その働きが感性です"},
+  {"time":"00:20","text":"つまり 分析するというよりも 体験して感じることに関係しています"},
+  {"time":"00:24","text":"一方で 知性とは 論理的に考えたり 分析したりする力を指します"},
+  {"time":"00:29","text":"知性は 情報を整理し 言葉で説明し 客観的に理解するために使われます"},
+  {"time":"00:33","text":"簡単に言うと 感性は「感じる力」 知性は「考える力」です"},
+  {"time":"00:37","text":"特にデザインの分野では 感性は非常に重要な役割を持っています"},
+  {"time":"00:42","text":"なぜなら 製品や体験が人にどのような印象や感情を与えるかを考える必要があるからです"},
+  {"time":"00:47","text":"ただし 感性と知性は対立するものではなく 互いに補い合う関係にあります"},
+  {"time":"00:50","text":"デザイナーは 感性で得た印象を 知性を使って形や構造に落とし込んでいきます"},
+  {"time":"00:55","text":"つまり 感性を理解することは 人がどのように感じるかを理解し それを設計に活かすことにつながります"}
+]</script>
+
+<script id="sample-keywords" type="application/json">[
+  {"time":"00:00","keyword":"感性 知性 違い","results":["感性","知性","違い"]},
+  {"time":"00:05","keyword":"感性 意味 感受性","results":["感性","意味","感受性"]},
+  {"time":"00:09","keyword":"直感 印象","results":["直感","印象"]},
+  {"time":"00:14","keyword":"製品 空間 音楽 感じる","results":["製品","空間","音楽","感じる"]},
+  {"time":"00:20","keyword":"体験 感じる","results":["体験","感じる"]},
+  {"time":"00:24","keyword":"知性 論理 分析","results":["知性","論理","分析"]},
+  {"time":"00:29","keyword":"情報 整理 説明","results":["情報","整理","説明"]},
+  {"time":"00:33","keyword":"感じる力 考える力","results":["感じる","考える","力"]},
+  {"time":"00:37","keyword":"デザイン 感性","results":["デザイン","感性"]},
+  {"time":"00:42","keyword":"印象 感情","results":["印象","感情"]},
+  {"time":"00:47","keyword":"補完 関係","results":["補完","関係"]},
+  {"time":"00:50","keyword":"形 構造","results":["形","構造"]},
+  {"time":"00:55","keyword":"設計 活かす","results":["設計","活かす"]}
+]</script>
+
+  <script>
+    const state = {
+      transcript: [],
+      keywords: [],
+      merged: [],
+      selectedId: null,
+      search: "",
+      focusKeyword: "",
+      sortBy: "time",
+      dark: false
+    };
+
+    const els = {
+      transcriptFile: document.getElementById('transcriptFile'),
+      keywordsFile: document.getElementById('keywordsFile'),
+      loadSampleBtn: document.getElementById('loadSampleBtn'),
+      clearBtn: document.getElementById('clearBtn'),
+      resetFiltersBtn: document.getElementById('resetFiltersBtn'),
+      status: document.getElementById('status'),
+      searchInput: document.getElementById('searchInput'),
+      keywordSelect: document.getElementById('keywordSelect'),
+      sortSelect: document.getElementById('sortSelect'),
+      timeline: document.getElementById('timeline'),
+      timelineSummary: document.getElementById('timelineSummary'),
+      keywordBars: document.getElementById('keywordBars'),
+      keywordCountBadge: document.getElementById('keywordCountBadge'),
+      spotlight: document.getElementById('spotlight'),
+      spotlightBadge: document.getElementById('spotlightBadge'),
+      qualityFlags: document.getElementById('qualityFlags'),
+      liveTranscript: document.getElementById('live-transcript'),
+      transcription: document.getElementById('transcription'),
+      modeLabel: document.getElementById('modeLabel'),
+      themeBtn: document.getElementById('themeBtn')
+    };
+
+    function parseTimeToSeconds(timeStr) {
+      if (!timeStr || typeof timeStr !== 'string' || !/^\d{2}:\d{2}(?::\d{2})?$/.test(timeStr)) return null;
+      const parts = timeStr.split(':').map(Number);
+      if (parts.length === 2) return parts[0] * 60 + parts[1];
+      if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+      return null;
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function dedupe(array) {
+      return [...new Set(array.filter(Boolean))];
+    }
+
+    function tokenizeKeywordResults(arr) {
+      return dedupe((arr || []).map(x => String(x).trim()).filter(x => x && !/^[:：]$/.test(x)));
+    }
+
+    function loadJsonFile(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            resolve(JSON.parse(reader.result));
+          } catch {
+            reject(new Error(`Could not parse ${file.name} as JSON.`));
+          }
+        };
+        reader.onerror = () => reject(new Error(`Failed to read ${file.name}.`));
+        reader.readAsText(file, 'utf-8');
+      });
+    }
+
+    function buildMerged(transcript, keywords) {
+      const byTime = new Map();
+      for (const row of keywords) {
+        const key = row.time || 'UNKNOWN';
+        if (!byTime.has(key)) byTime.set(key, []);
+        byTime.get(key).push(row);
+      }
+
+      const transcriptRows = transcript.map((row, index) => {
+        const exactMatches = byTime.get(row.time) || [];
+        const keywordTokens = dedupe(exactMatches.flatMap(item => tokenizeKeywordResults(item.results || [])));
+        const rawKeywordStrings = dedupe(exactMatches.map(item => item.keyword).filter(Boolean));
+        return {
+          id: `${row.time || 'row'}-${index}`,
+          time: row.time || '??:??',
+          seconds: parseTimeToSeconds(row.time),
+          text: row.text || '',
+          textLength: (row.text || '').length,
+          keywordTokens,
+          rawKeywordStrings,
+          keywordCount: keywordTokens.length,
+          density: keywordTokens.length / Math.max((row.text || '').length, 1),
+          isUnassigned: false
+        };
+      });
+
+      const unassignedKeywords = keywords
+        .filter(row => !row.time || row.time === '??:??' || !transcript.some(t => t.time === row.time))
+        .map((row, index) => ({
+          id: `unassigned-${index}`,
+          time: row.time || '??:??',
+          seconds: parseTimeToSeconds(row.time),
+          text: '',
+          textLength: 0,
+          keywordTokens: tokenizeKeywordResults(row.results || []),
+          rawKeywordStrings: [row.keyword].filter(Boolean),
+          keywordCount: tokenizeKeywordResults(row.results || []).length,
+          density: 0,
+          isUnassigned: true
+        }));
+
+      return { transcriptRows, unassignedKeywords };
+    }
+
+    function getKeywordFrequencyMap() {
+      const freq = new Map();
+      for (const row of state.merged) {
+        for (const token of row.keywordTokens) {
+          freq.set(token, (freq.get(token) || 0) + 1);
+        }
+      }
+      return [...freq.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    }
+
+    function getVisibleSegments() {
+      let rows = [...state.merged.filter(item => !item.isUnassigned)];
+      const q = state.search.trim().toLowerCase();
+      if (q) {
+        rows = rows.filter(item => {
+          const text = `${item.text} ${item.keywordTokens.join(' ')} ${item.rawKeywordStrings.join(' ')}`.toLowerCase();
+          return text.includes(q);
+        });
+      }
+      if (state.focusKeyword) rows = rows.filter(item => item.keywordTokens.includes(state.focusKeyword));
+
+      if (state.sortBy === 'density') {
+        rows.sort((a, b) => b.keywordCount - a.keywordCount || (a.seconds ?? 999999) - (b.seconds ?? 999999));
+      } else if (state.sortBy === 'length') {
+        rows.sort((a, b) => b.textLength - a.textLength || (a.seconds ?? 999999) - (b.seconds ?? 999999));
+      } else {
+        rows.sort((a, b) => (a.seconds ?? 999999) - (b.seconds ?? 999999));
+      }
+      return rows;
+    }
+
+    function updateKeywordSelect() {
+      const current = state.focusKeyword;
+      const options = getKeywordFrequencyMap().map(([token]) => token);
+      els.keywordSelect.innerHTML = `<option value="">全キーワード</option>` + options.map(token => `<option value="${escapeHtml(token)}">${escapeHtml(token)}</option>`).join('');
+      els.keywordSelect.value = current;
+    }
+
+    function highlightText(text, term) {
+      const safe = escapeHtml(text);
+      if (!term) return safe;
+      const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return safe.replace(new RegExp(escapedTerm, 'gi'), match => `<mark class="inline-highlight">${match}</mark>`);
+    }
+
+    function renderTranscriptPane() {
+      const rows = getVisibleSegments();
+      if (!rows.length) {
+        els.liveTranscript.innerHTML = `<div class="empty">書き起こしセグメント現在なし。</div>`;
+        return;
+      }
+      els.liveTranscript.innerHTML = rows.map(row => `
+        <div class="transcript-line ${state.selectedId === row.id ? 'active' : ''}" data-segment-id="${escapeHtml(row.id)}">
+          <span class="transcript-time">${escapeHtml(row.time)}</span>
+          <div class="transcript-text">${highlightText(row.text || '(No transcript text for this time range.)', state.search)}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderTimeline() {
+      const rows = getVisibleSegments();
+      els.timelineSummary.textContent = `${rows.length} segment${rows.length === 1 ? '' : 's'}`;
+      if (!rows.length) {
+        els.timeline.innerHTML = `<div class="empty">書き起こしセグメント現在なし。</div>`;
+        return;
+      }
+
+      els.timeline.innerHTML = rows.map(row => `
+        <article class="segment ${state.selectedId === row.id ? 'active' : ''}" data-segment-id="${escapeHtml(row.id)}">
+          <div class="segment-top">
+            <span class="time-badge">${escapeHtml(row.time)}</span>
+            <span class="count-badge">${row.keywordCount} keyword${row.keywordCount === 1 ? '' : 's'}</span>
+          </div>
+          <div class="segment-text">${highlightText(row.text || '(No transcript text for this time range.)', state.search)}</div>
+          <div class="chips">
+            ${row.keywordTokens.length
+              ? row.keywordTokens.slice(0, 12).map(token => `<span class="chip" data-chip="${escapeHtml(token)}">${highlightText(token, state.search)}</span>`).join('')
+              : `<span class="chip muted">No matched timed keywords</span>`}
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function renderKeywordBars() {
+      const freq = getKeywordFrequencyMap();
+      els.keywordCountBadge.textContent = `${freq.length} tokens`;
+      if (!freq.length) {
+        els.keywordBars.innerHTML = `<div class="empty">キーワード現在なし。</div>`;
+        return;
+      }
+      const top = freq.slice(0, 10);
+      const max = top[0][1] || 1;
+      els.keywordBars.innerHTML = top.map(([token, count]) => `
+        <div class="bar-row">
+          <div class="bar-meta"><span>${escapeHtml(token)}</span><strong>${count}</strong></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${(count / max) * 100}%"></div></div>
+        </div>
+      `).join('');
+    }
+
+    function renderSpotlight() {
+      const selected = state.merged.find(item => item.id === state.selectedId) || getVisibleSegments()[0] || null;
+      els.spotlightBadge.textContent = selected ? selected.time : 'No selection';
+      if (!selected) {
+        els.spotlight.innerHTML = `<div class="empty">書き起こしセグメントを選べして下さい。</div>`;
+        return;
+      }
+      state.selectedId = selected.id;
+      els.spotlight.innerHTML = `
+        <div class="mini-row"><span class="k">Time</span><span class="v">${escapeHtml(selected.time)}</span></div>
+        <div class="mini-row"><span class="k">Text length</span><span class="v">${selected.textLength} characters</span></div>
+        <div class="mini-row"><span class="k">Keyword count</span><span class="v">${selected.keywordCount}</span></div>
+        <div class="spotlight-block">${escapeHtml(selected.text || '(No transcript text for this item)')}</div>
+        <div class="keyword-list">
+          ${selected.keywordTokens.length
+            ? selected.keywordTokens.map(token => `<span class="keyword-chip" data-chip="${escapeHtml(token)}">${escapeHtml(token)}</span>`).join('')
+            : `<span class="chip muted">No keyword tokens</span>`}
+        </div>
+        <div class="spotlight-block">
+          <strong>Raw keyword strings</strong><br><br>
+          ${selected.rawKeywordStrings.length
+            ? selected.rawKeywordStrings.map(str => `<div style="margin-top:0.55rem; color: var(--color-text-soft);">${escapeHtml(str)}</div>`).join('')
+            : `<span style="color: var(--color-text-soft);">No exact-time keyword strings attached to this segment.</span>`}
+        </div>
+      `;
+    }
+
+    function renderQualityFlags() {
+      const rowsMissingTimedMatch = state.transcript.filter(item => !state.keywords.some(k => k.time === item.time)).length;
+      const invalidTimeKeywords = state.keywords.filter(item => parseTimeToSeconds(item.time) === null).length;
+      const possibleNoiseTokens = state.keywords.flatMap(item => item.results || []).filter(token => String(token).trim().length <= 1 || /^[:：]$/.test(String(token).trim())).length;
+      const unassigned = state.merged.filter(item => item.isUnassigned).length;
+      const flags = [
+        ['Transcript rows without exact keyword time match', rowsMissingTimedMatch],
+        ['Keyword rows with invalid / unknown time', invalidTimeKeywords],
+        ['Very short or punctuation-like tokens', possibleNoiseTokens],
+        ['Unassigned keyword-only records', unassigned]
+      ];
+      els.qualityFlags.innerHTML = flags.map(([label, value]) => `
+        <div class="mini-row">
+          <span class="k">${escapeHtml(label)}</span>
+          <span class="v">${escapeHtml(value)}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderAll() {
+      updateKeywordSelect();
+      renderTranscriptPane();
+      renderTimeline();
+      renderKeywordBars();
+      renderSpotlight();
+      renderQualityFlags();
+    }
+
+    function setData(transcript, keywords, statusText = 'アップロード完了。') {
+      if (!Array.isArray(transcript) || !Array.isArray(keywords)) {
+        els.status.textContent = 'アップロードに失敗しました。ファイルが間違っていますか？';
+        els.status.style.color = 'var(--color-danger)';
+        return;
+      }
+      state.transcript = transcript;
+      state.keywords = keywords;
+      const { transcriptRows, unassignedKeywords } = buildMerged(transcript, keywords);
+      state.merged = [...transcriptRows, ...unassignedKeywords];
+      state.selectedId = transcriptRows[0]?.id || null;
+      els.status.textContent = statusText;
+      els.status.style.color = 'var(--color-good)';
+      renderAll();
+    }
+
+    async function tryLoadUploads() {
+      const transcriptFile = els.transcriptFile.files[0];
+      const keywordsFile = els.keywordsFile.files[0];
+      if (!transcriptFile || !keywordsFile) return;
+      try {
+        const [transcript, keywords] = await Promise.all([loadJsonFile(transcriptFile), loadJsonFile(keywordsFile)]);
+        setData(transcript, keywords, `Loaded ${transcriptFile.name} and ${keywordsFile.name}.`);
+      } catch (err) {
+        els.status.textContent = err.message;
+        els.status.style.color = 'var(--color-danger)';
+      }
+    }
+
+    function resetFilters() {
+      state.search = '';
+      state.focusKeyword = '';
+      state.sortBy = 'time';
+      els.searchInput.value = '';
+      els.keywordSelect.value = '';
+      els.sortSelect.value = 'time';
+      renderAll();
+    }
+
+    function setTheme(dark) {
+      state.dark = dark;
+      document.documentElement.classList.toggle('dark', dark);
+      els.themeBtn.textContent = dark ? 'ライト' : 'ダーク';
+      els.modeLabel.textContent = dark ? '幇助' : '自動';
+      els.transcription.className = dark ? 'mode-assistive' : 'mode-automated';
+      els.liveTranscript.className = dark ? 'mode-assistive' : 'mode-automated';
+    }
+
+    els.transcriptFile.addEventListener('change', tryLoadUploads);
+    els.keywordsFile.addEventListener('change', tryLoadUploads);
+    els.searchInput.addEventListener('input', e => { state.search = e.target.value; renderAll(); });
+    els.keywordSelect.addEventListener('change', e => { state.focusKeyword = e.target.value; renderAll(); });
+    els.sortSelect.addEventListener('change', e => { state.sortBy = e.target.value; renderAll(); });
+    els.resetFiltersBtn.addEventListener('click', resetFilters);
+    els.themeBtn.addEventListener('click', () => setTheme(!state.dark));
+
+    els.loadSampleBtn.addEventListener('click', () => {
+      const transcript = JSON.parse(document.getElementById('sample-transcript').textContent);
+      const keywords = JSON.parse(document.getElementById('sample-keywords').textContent);
+      setData(transcript, keywords, 'アップロード完了。');
+    });
+
+    els.clearBtn.addEventListener('click', () => {
+      els.transcriptFile.value = '';
+      els.keywordsFile.value = '';
+      state.transcript = [];
+      state.keywords = [];
+      state.merged = [];
+      state.selectedId = null;
+      resetFilters();
+      els.status.textContent = 'データを消しました、 ファイルをアップして下さい。';
+      els.status.style.color = 'var(--color-text-soft)';
+    });
+
+    document.addEventListener('click', e => {
+      const segment = e.target.closest('[data-segment-id]');
+      if (segment) {
+        state.selectedId = segment.dataset.segmentId;
+        renderAll();
+        return;
+      }
+      const chip = e.target.closest('[data-chip]');
+      if (chip) {
+        state.focusKeyword = chip.dataset.chip;
+        els.keywordSelect.value = state.focusKeyword;
+        renderAll();
+      }
+    });
+
+    setTheme(true);
+    renderAll();
+  </script>
+</body>
+</html>

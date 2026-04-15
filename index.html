@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html class="dark" lang="ja">
 
 <head>
   <meta charset="utf-8" />
@@ -17,6 +17,7 @@
 <body>
 
   <div id="app">
+
     <!-- Header -->
     <header id="header">
       <div class="recording-indicator">
@@ -26,11 +27,11 @@
         <p id="status" class="recording-time"></p>
       </div>
 
-      <h2 id="lecture-title">Class Sample</h2>
+      <h2 id="lecture-title">授業のタイトル</h2>
 
       <div>
-        <button class="btn" onclick="stopTranscription()">End</button>
-        <button class="btn" onclick="debugTest()">Debug</button>
+        <button class="btn" onclick="stopTranscription()">終了</button>
+        <button class="btn" onclick="debugTest()">ディバッグ</button>
       </div>
     </header>
 
@@ -45,8 +46,10 @@
       <button id="capture-btn">Capture</button>
       <canvas id="snapshot" class="hidden"></canvas>
     </div>
+    
     <!-- Transcription area -->
     <main id="transcription">
+      <div id="transcript-overlay" aria-hidden="true"></div>
       <div id="live-transcript"></div>
     </main>
 
@@ -54,17 +57,89 @@
     <footer id="keyword-footer">
       <div class="footer-content">
         <div id="guide-msg" class="footer-header">
-          <p class="footer-title">Drag keywords here</p>
-          <p class="footer-subtitle">Highlight words or phrases from the transcription above to save it for later
-            review.</p>
+          <p class="footer-title">ここでキーワードをドラッグしてください</p>
+          <p class="footer-subtitle">上からのキーワードをハイライトする、ここでキープをできます</p>
         </div>
 
         <div id="note-area" class="keyword-list"></div>
       </div>
     </footer>
+
+    <div id="modeBox" class="mode assistive">Neutral Focus (0.0)</div>
+
   </div>
 
   <script type="module" src="./main.js"></script>
+
+  <!--ADDED 4/7/2026-->
+  <script>
+    const modeBox = document.getElementById("modeBox");
+    const transcriptionArea = document.getElementById("transcription");
+
+    let focusScore = 0;
+
+    const MAX_SCORE = 5;
+    const MIN_SCORE = -5;
+
+    const TYPING_BOOST = 0.5;
+    const MOUSE_PENALTY = 0.05;
+    const IDLE_DECAY = 0.05;
+
+    function clampScore() {
+      focusScore = Math.max(MIN_SCORE, Math.min(MAX_SCORE, focusScore));
+    }
+
+    function setTranscriptMode(mode) {
+      transcriptionArea.classList.remove(
+        "mode-immersive",
+        "mode-assistive",
+        "mode-automated"
+      );
+      transcriptionArea.classList.add(`mode-${mode}`);
+    }
+
+    function updateUI() {
+      if (focusScore > 2) {
+        modeBox.className = "mode immersive";
+        modeBox.textContent = `Higher Focus (${focusScore.toFixed(1)})`;
+        setTranscriptMode("immersive");
+      } else if (focusScore < -2) {
+        modeBox.className = "mode automated";
+        modeBox.textContent = `Lower Focus (${focusScore.toFixed(1)})`;
+        setTranscriptMode("automated");
+      } else {
+        modeBox.className = "mode assistive";
+        modeBox.textContent = `Neutral Focus (${focusScore.toFixed(1)})`;
+        setTranscriptMode("assistive");
+      }
+    }
+
+    document.addEventListener("keydown", () => {
+      focusScore += TYPING_BOOST;
+      clampScore();
+      updateUI();
+    });
+
+    document.addEventListener("mousemove", () => {
+      focusScore -= MOUSE_PENALTY;
+      clampScore();
+      updateUI();
+    });
+
+    document.addEventListener("wheel", () => {
+      focusScore -= MOUSE_PENALTY;
+      clampScore();
+      updateUI();
+    });
+
+    setInterval(() => {
+      focusScore -= IDLE_DECAY;
+      clampScore();
+      updateUI();
+    }, 500);
+
+    updateUI();
+  </script>
 </body>
 
 </html>
